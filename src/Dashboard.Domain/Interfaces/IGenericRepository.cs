@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Sieve.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq.Expressions;
+using System.Text;
+using Dashboard.Domain.Common;
 
 namespace Dashboard.Domain.Interfaces
 {
@@ -14,6 +16,6 @@ namespace Dashboard.Domain.Interfaces
         Task<T?> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
-
+        Task<PagedResult<T>> GetPagedAsync(PaginationFilter filter);
     }
 }

@@ -1,39 +1,30 @@
 ﻿using Dashboard.Domain.Common;
+using Dashboard.Domain.Entities;
 using Dashboard.Domain.Interfaces;
 using Dashboard.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Text;
 
 namespace Dashboard.Infrastructure.Repository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class QueueRepository : GenericRepository<Domain.Entities.Queue>, IQueueRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly ISieveProcessor _sieveProcessor;
-        private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(ApplicationDbContext context, ISieveProcessor sieveProcessor)
+        public QueueRepository(ApplicationDbContext context, ISieveProcessor sieveProcessor)
+            : base(context, sieveProcessor)
         {
             _context = context;
             _sieveProcessor = sieveProcessor;
-            _dbSet = _context.Set<T>();
         }
 
-        public async Task<T?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
-
-        public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync();
-
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
-        }
-
-        public async Task<PagedResult<T>> GetPagedAsync(PaginationFilter filter)
+        public async Task<PagedResult<Domain.Entities.Queue>> GetQueuesWithCallsPagedAsync(PaginationFilter filter)
         {
             var sieveModel = new SieveModel
             {
@@ -43,15 +34,17 @@ namespace Dashboard.Infrastructure.Repository
                 PageSize = filter.PageSize
             };
 
-            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+            IQueryable<Domain.Entities.Queue> query = _context.Queues
+                .Include("_queueCalls")
+                .AsNoTracking();
 
             var filteredQuery = _sieveProcessor.Apply(sieveModel, query, applyPagination: false);
             var totalCount = await filteredQuery.CountAsync();
 
-            var pagedQuery = _sieveProcessor.Apply(sieveModel, query);
+            var pagedQuery = _sieveProcessor.Apply(sieveModel, filteredQuery, applyFiltering: false, applySorting: false);
             var items = await pagedQuery.ToListAsync();
 
-            return new PagedResult<T>
+            return new PagedResult<Domain.Entities.Queue>
             {
                 Items = items,
                 TotalCount = totalCount,
@@ -59,11 +52,6 @@ namespace Dashboard.Infrastructure.Repository
                 PageSize = sieveModel.PageSize ?? 10
             };
         }
-
-        public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
-
-        public void Update(T entity) => _dbSet.Update(entity);
-
-        public void Delete(T entity) => _dbSet.Remove(entity);
     }
 }
+

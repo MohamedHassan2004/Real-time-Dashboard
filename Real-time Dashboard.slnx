@@ -5,5 +5,4 @@
     <Project Path="src/Dashboard.Domain/Dashboard.Domain.csproj" />
     <Project Path="src/Dashboard.Infrastructure/Dashboard.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/test/" />
 </Solution>

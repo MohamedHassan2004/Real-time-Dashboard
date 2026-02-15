@@ -1,14 +1,15 @@
-﻿using Dashboard.Infrastructure.Data;
+﻿using Dashboard.Domain.Interfaces;
+using Dashboard.Infrastructure.Data;
+using Dashboard.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace Dashboard.Infrastructure
 {
-    public static class DependencyInjection
+    public static class DependencyInjectionExtensions
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
@@ -16,11 +17,15 @@ namespace Dashboard.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            // Sieve
+            services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
+
             // Repositories
-            //services.AddScoped<IAgentRepository, AgentRepository>();
-            //services.AddScoped<IQueueRepository, QueueRepository>();
-            //services.AddScoped<ICallRepository, CallRepository>();
+            services.AddScoped<IAgentRepository, AgentRepository>();
+            services.AddScoped<IQueueRepository, QueueRepository>();
+            services.AddScoped<ICallRepository, CallRepository>();
 
         }
     }
 }
+
