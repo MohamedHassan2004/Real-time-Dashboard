@@ -14,7 +14,9 @@ namespace Dashboard.Application.AutoMapper
         {
             CreateMap<Agent, AgentDTO>()
                 .ForMember(dest => dest.Duration,
-                opt => opt.MapFrom(src => (DateTime.UtcNow - src.LastStatusChange).ToString(@"hh\:mm\:ss")));
+                opt => opt.MapFrom(src => (DateTime.UtcNow - src.LastStatusChange).ToString(@"hh\:mm\:ss")))
+                .ForMember(dest => dest.LastStatusChange,
+                opt => opt.MapFrom(src => src.LastStatusChange.ToString("yyyy-MM-ddTHH:mm:ssZ")));
         }
     }
 }

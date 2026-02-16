@@ -1,0 +1,81 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col h-full">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <h3 class="font-bold text-gray-800">Agent Status</h3>
+        </div>
+        <div class="relative">
+            <input 
+                type="text" 
+                [(ngModel)]="searchTerm" 
+                (ngModelChange)="onSearch()"
+                placeholder="Search agents..." 
+                class="pl-8 pr-4 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 w-48"
+            >
+            <svg class="w-4 h-4 text-gray-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="flex-1 overflow-auto">
+        <table class="w-full text-left text-sm">
+            <thead class="bg-gray-50 text-gray-500 font-medium">
+                <tr>
+                    <th class="px-4 py-3 cursor-pointer hover:text-gray-700" (click)="sort('name')">
+                        <div class="flex items-center gap-1">Agent Name <span class="text-xs">↕</span></div>
+                    </th>
+                    <th class="px-4 py-3 cursor-pointer hover:text-gray-700" (click)="sort('status')">
+                        <div class="flex items-center gap-1">Current Status <span class="text-xs">↕</span></div>
+                    </th>
+                    <th class="px-4 py-3 cursor-pointer hover:text-gray-700" (click)="sort('duration')">
+                        <div class="flex items-center gap-1">Duration <span class="text-xs">↕</span></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <tr *ngFor="let agent of agents" class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3 font-medium text-gray-800">{{ agent.name }}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full"
+                                [ngClass]="{
+                                    'bg-green-500': agent.status === AgentStatus.Online,
+                                    'bg-yellow-500': agent.status === AgentStatus.Idle,
+                                    'bg-red-500': agent.status === AgentStatus.NotReady
+                                }"></span>
+                            <span class="text-gray-600">
+                                {{ getStatusLabel(agent.status) }}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 text-gray-500 font-mono text-xs">{{ agent.duration }}</td>
+                </tr>
+                <tr *ngIf="agents.length === 0">
+                    <td colspan="3" class="px-4 py-8 text-center text-gray-400">
+                        No agents found matching your search.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+        <span>Showing {{ (page - 1) * pageSize + 1 }} to {{ min(page * pageSize, totalCount) }} of {{ totalCount }}</span>
+        <div class="flex items-center gap-1">
+            <button 
+                [disabled]="page === 1" 
+                (click)="onPageChange(page - 1)"
+                class="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button 
+                [disabled]="page * pageSize >= totalCount" 
+                (click)="onPageChange(page + 1)"
+                class="p-1 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+      </div>
+    </div>

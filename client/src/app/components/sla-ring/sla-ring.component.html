@@ -1,0 +1,16 @@
+<div class="relative w-32 h-32 flex items-center justify-center">
+      <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+        <!-- Background Ring -->
+        <circle cx="50" cy="50" r="40" stroke="#e5e7eb" stroke-width="8" fill="none" />
+        <!-- Progress Ring -->
+        <circle cx="50" cy="50" r="40" stroke="#0d9488" stroke-width="8" fill="none"
+          stroke-linecap="round"
+          [attr.stroke-dasharray]="circumference"
+          [attr.stroke-dashoffset]="dashOffset"
+          class="transition-all duration-500 ease-out" />
+      </svg>
+      <div class="absolute flex flex-col items-center">
+        <span class="text-xl font-bold text-gray-800">{{ percentage | number:'1.1-1' }}%</span>
+        <span class="text-xs text-gray-500 font-medium tracking-wider">SLA</span>
+      </div>
+    </div>

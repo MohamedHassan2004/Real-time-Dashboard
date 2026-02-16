@@ -1,0 +1,60 @@
+<header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shadow-sm z-10 relative">
+      <!-- Left: Brand/Selector -->
+      <div class="flex items-center gap-2">
+        <div class="p-2 bg-gray-100 rounded-md">
+           <!-- Icon placeholder -->
+           <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+        </div>
+        <span class="font-semibold text-gray-700">VET</span>
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+      </div>
+
+      <!-- Center: Status Badges -->
+      <div class="flex items-center gap-4">
+        <!-- Online -->
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full border border-green-200 bg-green-50">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          <span class="text-xs font-medium text-green-700">Online: {{ onlineCount }}</span>
+        </div>
+        <!-- Idle -->
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-200 bg-yellow-50">
+           <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+           <span class="text-xs font-medium text-yellow-700">Idle: {{ idleCount }}</span>
+        </div>
+        <!-- Not Ready -->
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full border border-red-200 bg-red-50">
+           <span class="w-2 h-2 rounded-full bg-red-500"></span>
+           <span class="text-xs font-medium text-red-700">Not Ready: {{ notReadyCount }}</span>
+        </div>
+      </div>
+
+      <!-- Right: Time, Notifications, User -->
+      <div class="flex items-center gap-6">
+        <!-- Date Time -->
+        <div class="text-sm text-gray-500 border-r border-gray-200 pr-6">
+          {{ currentDate | date:'MMM d, y | HH:mm:ss' }}
+        </div>
+
+        <!-- Notification Bell -->
+        <div class="relative">
+          <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+          <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+        </div>
+
+        <!-- User Profile -->
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1">
+                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                <span class="text-sm font-medium text-gray-600">Online</span>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">
+                MH
+            </div>
+            <div class="flex flex-col items-start leading-none">
+                <span class="text-sm font-medium text-gray-800">Mohamed Hassan</span>
+                <span class="text-[10px] font-bold text-white bg-red-500 px-1 rounded mt-0.5">SUPER ADMIN</span>
+            </div>
+             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </header>

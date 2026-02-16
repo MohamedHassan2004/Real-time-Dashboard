@@ -1,0 +1,30 @@
+<aside class="w-80 bg-white border-r border-gray-200 flex flex-col h-full overflow-y-auto">
+
+      <!-- Real-time Status Header -->
+      <div class="px-6 py-4">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-gray-800">Real-time Status</h2>
+          <span class="text-xs text-gray-400">Last updated:<br>{{ lastUpdated | date:'h:mm:ss a' }}</span>
+        </div>
+
+        <!-- Toggles -->
+        <div class="flex bg-gray-100 p-1 rounded-lg mb-6">
+          <button class="flex-1 py-1.5 text-sm font-medium rounded-md bg-white text-gray-800 shadow-sm">Daily</button>
+          <button class="flex-1 py-1.5 text-sm font-medium rounded-md text-gray-500 hover:text-gray-700">Monthly</button>
+        </div>
+
+        <!-- SLA Ring -->
+        <div class="flex justify-center mb-8">
+            <app-sla-ring [percentage]="stats?.slaPercentage || 0"></app-sla-ring>
+        </div>
+
+        <!-- Stats Grid -->
+        <app-stats-grid 
+            [offered]="stats?.totalOffered || 0"
+            [answered]="stats?.answered || 0"
+            [inQueue]="stats?.inQueue || 0"
+            [abandoned]="stats?.abandoned || 0">
+        </app-stats-grid>
+      </div>
+
+    </aside>

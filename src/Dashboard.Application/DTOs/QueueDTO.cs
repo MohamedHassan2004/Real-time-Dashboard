@@ -9,5 +9,6 @@ namespace Dashboard.Application.DTOs
         public string Name { get; set; } = string.Empty;
         public int InQueue { get; set; }
         public string MaxWait { get; set; } = string.Empty;
+        public string? OldestCallCreatedAt { get; set; }
     }
 }

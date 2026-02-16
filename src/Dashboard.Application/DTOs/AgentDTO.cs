@@ -10,6 +10,7 @@ namespace Dashboard.Application.DTOs
         public string Name { get; set; } = string.Empty;
         public AgentStatus Status { get; set; }
         public string Duration { get; set; } = string.Empty;
+        public string? LastStatusChange { get; set; }
 
     }
 }

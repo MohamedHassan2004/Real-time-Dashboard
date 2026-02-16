@@ -1,5 +1,6 @@
 ﻿using Dashboard.Application.Interfaces;
 using Dashboard.Domain.Enums;
+using System.Linq;
 
 namespace Dashboard.API.Services
 {
@@ -48,6 +49,26 @@ namespace Dashboard.API.Services
                             Status = CallStatus.InQueue,
                             CreatedAt = DateTime.UtcNow
                         });
+                    }
+
+                    // 3. Process existing InQueue calls (simulate answering/abandoning)
+                    var inQueueCalls = await unitOfWork.Calls.FindAsync(c => c.Status == CallStatus.InQueue);
+                    foreach (var call in inQueueCalls)
+                    {
+                        if (_random.NextDouble() < 0.3) // 30% chance to change status
+                        {
+                            if (_random.NextDouble() < 0.8) // 80% Answered, 20% Abandoned
+                            {
+                                // Assign to a random agent
+                                var randomAgentToAssign = agentList.ElementAt(_random.Next(agentList.Count));
+                                call.AssignAgent(randomAgentToAssign.Id);
+                            }
+                            else
+                            {
+                                call.UpdateStatus(CallStatus.Abandoned);
+                            }
+                            unitOfWork.Calls.Update(call);
+                        }
                     }
 
                     await unitOfWork.CompleteAsync();

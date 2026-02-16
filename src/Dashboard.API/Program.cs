@@ -68,11 +68,11 @@ namespace Dashboard.API
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-            app.UseCors("AllowDashboard");
-
+            app.UseHttpsRedirection();
+            
             app.UseRouting();
 
-            app.UseHttpsRedirection();
+            app.UseCors("AllowDashboard");
 
             app.UseAuthorization();
 

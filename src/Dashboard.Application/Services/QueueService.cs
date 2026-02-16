@@ -64,6 +64,7 @@ namespace Dashboard.Application.Services
                 Name = queue.Name,
                 InQueue = inQueueCalls.Count,
                 MaxWait = maxWait.ToString(@"hh\:mm\:ss"),
+                OldestCallCreatedAt = inQueueCalls.Count > 0 ? inQueueCalls.Min(c => c.CreatedAt).ToString("yyyy-MM-ddTHH:mm:ssZ") : null
             };
         }
 
