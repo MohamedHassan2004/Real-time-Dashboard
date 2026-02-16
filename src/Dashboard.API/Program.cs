@@ -1,8 +1,12 @@
 using AutoMapper;
+using Dashboard.API.Hubs;
 using Dashboard.API.Middlewares;
+using Dashboard.API.Services;
 using Dashboard.Application;
+using Dashboard.Application.Interfaces;
 using Dashboard.Infrastructure;
 using Dashboard.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Sieve.Models;
 using Sieve.Services;
 
@@ -21,11 +25,29 @@ namespace Dashboard.API
 
             // Sieve
             builder.Services.Configure<SieveOptions>(builder.Configuration.GetSection("Sieve"));
-            builder.Services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
 
             builder.Services.AddControllers();
 
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            // SignalR
+            builder.Services.AddSignalR();
+            builder.Services.AddScoped<IDashboardNotifier, Dashboard.API.SignalR.SignalRDashboardNotifier>();
+
+            // CORS (for frontend clients)
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowDashboard", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
+
+            // Background broadcast service
+            builder.Services.AddHostedService<DashboardBroadcastService>();
+
+            // Swagger
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -37,9 +59,16 @@ namespace Dashboard.API
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                // Auto-apply migrations + seed data
+                using var scope = app.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate();
             }
 
-            app.UseMiddleware<GlobelExceptionHandlerMiddleware>();
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
+            app.UseCors("AllowDashboard");
 
             app.UseRouting();
 
@@ -47,10 +76,11 @@ namespace Dashboard.API
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+            app.MapHub<DashboardHub>("/hubs/dashboard");
 
             app.Run();
         }
     }
 }
+

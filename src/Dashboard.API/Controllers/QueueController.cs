@@ -16,7 +16,7 @@ namespace Dashboard.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAgents(
+        public async Task<IActionResult> GetQueues(
             [FromQuery] string? filters,
             [FromQuery] string? sorts,
             [FromQuery] int? page,

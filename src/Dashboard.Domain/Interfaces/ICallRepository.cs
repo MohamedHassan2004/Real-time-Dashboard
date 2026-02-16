@@ -7,5 +7,6 @@ namespace Dashboard.Domain.Interfaces
 {
     public interface ICallRepository : IGenericRepository<Call>
     {
+        Task<(int TotalOffered, int Answered, int Abandoned, int InQueue)> GetTodayStatsAsync();
     }
 }

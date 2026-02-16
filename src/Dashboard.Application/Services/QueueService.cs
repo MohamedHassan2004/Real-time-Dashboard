@@ -12,23 +12,23 @@ namespace Dashboard.Application.Services
 {
     public class QueueService : IQueueService
     {
-        private readonly IQueueRepository _queueRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<QueueService> _logger;
 
         public QueueService(
-            IQueueRepository queueRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper,
             ILogger<QueueService> logger)
         {
-            _queueRepository = queueRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<Result<PagedResult<QueueDTO>>> GetQueuesAsync(PaginationFilter filter)
         {
-            var pagedQueues = await _queueRepository.GetQueuesWithCallsPagedAsync(filter);
+            var pagedQueues = await _unitOfWork.Queues.GetQueuesWithCallsPagedAsync(filter);
 
             if (pagedQueues == null)
             {
@@ -69,3 +69,4 @@ namespace Dashboard.Application.Services
 
     }
 }
+

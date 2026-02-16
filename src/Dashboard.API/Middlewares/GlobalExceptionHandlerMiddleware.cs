@@ -3,12 +3,12 @@ using System.Text.Json;
 
 namespace Dashboard.API.Middlewares
 {
-    public class GlobelExceptionHandlerMiddleware
+    public class GlobalExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<GlobelExceptionHandlerMiddleware> _logger;
+        private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
 
-        public GlobelExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobelExceptionHandlerMiddleware> logger)
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
         {
             _next = next;
             _logger = logger;

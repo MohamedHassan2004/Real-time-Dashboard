@@ -12,23 +12,23 @@ namespace Dashboard.Application.Services
 {
     public class AgentService : IAgentService
     {
-        private readonly IAgentRepository _agentRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<AgentService> _logger;
 
         public AgentService(
-            IAgentRepository agentRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper,
             ILogger<AgentService> logger)
         {
-            _agentRepository = agentRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<Result<PagedResult<AgentDTO>>> GetAgentsAsync(PaginationFilter filter)
         {
-            var pagedAgents = await _agentRepository.GetPagedAsync(filter);
+            var pagedAgents = await _unitOfWork.Agents.GetPagedAsync(filter);
 
             if (pagedAgents == null)
             {
@@ -51,3 +51,4 @@ namespace Dashboard.Application.Services
         }
     }
 }
+

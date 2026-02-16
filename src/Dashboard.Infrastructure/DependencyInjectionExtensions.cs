@@ -1,4 +1,5 @@
-﻿using Dashboard.Domain.Interfaces;
+﻿using Dashboard.Application.Interfaces;
+using Dashboard.Domain.Interfaces;
 using Dashboard.Infrastructure.Data;
 using Dashboard.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,8 @@ namespace Dashboard.Infrastructure
             services.AddScoped<IAgentRepository, AgentRepository>();
             services.AddScoped<IQueueRepository, QueueRepository>();
             services.AddScoped<ICallRepository, CallRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }
     }
 }
-

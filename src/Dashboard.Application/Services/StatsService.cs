@@ -9,24 +9,18 @@ namespace Dashboard.Application.Services
 {
     public class StatsService : IStatsService
     {
-        private readonly ICallRepository _callRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<StatsService> _logger;
 
-        public StatsService(ICallRepository callRepository, ILogger<StatsService> logger)
+        public StatsService(IUnitOfWork unitOfWork, ILogger<StatsService> logger)
         {
-            _callRepository = callRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
         public async Task<Result<StatsDTO>> GetStatsAsync()
         {
-            var calls = await _callRepository.GetAllAsync();
-            var callList = calls.ToList();
-
-            var answered = callList.Count(c => c.Status == CallStatus.Answered);
-            var abandoned = callList.Count(c => c.Status == CallStatus.Abandoned);
-            var inQueue = callList.Count(c => c.Status == CallStatus.InQueue);
-            var totalOffered = callList.Count;
+            var (totalOffered, answered, abandoned, inQueue) = await _unitOfWork.Calls.GetTodayStatsAsync();
 
             var sla = totalOffered > 0
                 ? Math.Round((double)answered / totalOffered * 100, 2)
@@ -46,3 +40,4 @@ namespace Dashboard.Application.Services
         }
     }
 }
+

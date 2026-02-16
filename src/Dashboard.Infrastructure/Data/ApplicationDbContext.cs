@@ -1,4 +1,5 @@
 ﻿using Dashboard.Domain.Entities;
+using Dashboard.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,9 @@ namespace Dashboard.Infrastructure.Data
                 .WithMany("_queueCalls")
                 .HasForeignKey(c => c.QueueId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Seed data
+            DataSeeder.Seed(modelBuilder);
         }
     }
 }
-

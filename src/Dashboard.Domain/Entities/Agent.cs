@@ -10,7 +10,7 @@ namespace Dashboard.Domain.Entities
         public int Id { get; private set; }
         public string Name { get; set; } = string.Empty;
         public AgentStatus Status { get; set; } = AgentStatus.NotReady;
-        public DateTime LastStatusChange { get; private set; }
+        public DateTime LastStatusChange { get; set; }
 
         private readonly List<Call> _agentCalls = new();
         public IReadOnlyCollection<Call> GetAgentCalls() => _agentCalls.AsReadOnly();
